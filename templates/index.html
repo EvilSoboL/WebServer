@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Отчеты ПМИМ-31</title>
+</head>
+<body>
+    <h1>Группа ПМИМ-31</h1>
+    <p>Члены бригады: Тарулин М.А., Холодова В.С.</p>
+
+    <h2>Список отчетов:</h2>
+    <ul>
+        {% for report in reports %}
+            <li><a href="{{ url_for('static', filename='reports/' + report) }}" target="_blank">{{ report }}</a></li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
