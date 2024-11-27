@@ -4,11 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="f65ac982-155e-4b58-a273-841450528294" name="Changes" comment="Пункт 2.1">
-      <change afterPath="$PROJECT_DIR$/server.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test.py" afterDir="false" />
+    <list default="true" id="f65ac982-155e-4b58-a273-841450528294" name="Changes" comment="Пункт 2.4 - не работает ссылка на ЛР5">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/readme.txt" beforeDir="false" afterPath="$PROJECT_DIR$/readme.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server.py" beforeDir="false" afterPath="$PROJECT_DIR$/server.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -23,6 +21,11 @@
     </option>
   </component>
   <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="4f9ed56889f67441c1a91b36e07b13a8bfe2c1d2" />
+      </map>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="GitHubPullRequestSearchHistory"><![CDATA[{
@@ -109,6 +112,9 @@
       <list>
         <item itemvalue="Python.server" />
         <item itemvalue="Python.app" />
+        <item itemvalue="Python.server" />
+        <item itemvalue="Python.app" />
+        <item itemvalue="Python.server" />
       </list>
     </recent_temporary>
   </component>
@@ -136,11 +142,31 @@
       <option name="project" value="LOCAL" />
       <updated>1732677190245</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Пункт 2.4 - не работает ссылка на ЛР5">
+      <option name="closed" value="true" />
+      <created>1732685244808</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1732685244808</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Пункт 2.1" />
-    <option name="LAST_COMMIT_MESSAGE" value="Пункт 2.1" />
+    <MESSAGE value="Пункт 2.4 - не работает ссылка на ЛР5" />
+    <option name="LAST_COMMIT_MESSAGE" value="Пункт 2.4 - не работает ссылка на ЛР5" />
   </component>
 </project>

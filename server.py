@@ -57,6 +57,16 @@ class HTTPServer:
                 client_socket.sendall(response.encode('utf-8'))
                 return
 
+            # Обработка favicon.ico
+            if path == '/favicon.ico':
+                response = (
+                    "HTTP/1.1 404 Not Found\r\n"
+                    "Content-Type: text/plain; charset=utf-8\r\n\r\n"
+                    "Favicon not found"
+                )
+                client_socket.sendall(response.encode('utf-8'))
+                return
+
             # Формирование ответа
             if method == 'GET':
                 if path == '/':
