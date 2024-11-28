@@ -2,6 +2,7 @@ import socket
 import threading
 import os
 import urllib.parse
+import html
 
 
 class HTTPServer:
@@ -10,6 +11,7 @@ class HTTPServer:
         self.port = port
         self.server_socket = None
         self.base_dir = os.path.dirname(os.path.abspath(__file__))
+        self.request_history = []
 
     def create_server_socket(self):
         """Создание и настройка основного сокета"""
@@ -55,6 +57,7 @@ class HTTPServer:
                     "Неверный формат запроса"
                 )
                 client_socket.sendall(response.encode('utf-8'))
+                self.add_to_request_history(request, response)
                 return
 
             # Обработка favicon.ico
@@ -90,6 +93,7 @@ class HTTPServer:
                         )
                         client_socket.sendall(response.encode('utf-8'))
                         client_socket.sendall(response_body)
+                        self.add_to_request_history(request, "PDF file sent")
                         client_socket.close()
                         return
                     else:
@@ -111,6 +115,9 @@ class HTTPServer:
             print("\nОтправляемый ответ:")
             print(response)
 
+            # Сохраняем информацию о запросе и ответе
+            self.add_to_request_history(request, response)
+
             # Отправка ответа клиенту
             client_socket.sendall(response.encode('utf-8'))
 
@@ -121,6 +128,24 @@ class HTTPServer:
             # Закрытие клиентского сокета
             if not client_socket._closed:
                 client_socket.close()
+
+    def add_to_request_history(self, request, response):
+        # Усечение длинных запросов/ответов
+        request_str = str(request)  # Максимум 1000 символов
+        response_str = str(response)
+
+        # Ограничиваем историю 50 последними записями
+        if len(self.request_history) >= 50:
+            self.request_history.pop(0)
+
+        # Добавляем запись в историю
+        self.request_history.append({
+            'request': request_str,
+            'response': response_str
+        })
+
+        # Отладочная печать
+        print(f"DEBUG: Добавлена запись в историю. Размер: {len(self.request_history)}")
 
     def serve_pdf(self, path):
         """Чтение и возврат содержимого PDF-файла"""
@@ -153,49 +178,83 @@ class HTTPServer:
         # Проверьте длину HTML-контента
         print("DEBUG: HTML length =", len(reports_html))
 
+        # Создание HTML для истории запросов
+        requests_history_html = ''.join([
+            f'''
+                <div class="request-response">
+                    <div class="request">
+                        <h3>Запрос:</h3>
+                        <pre>{html.escape(record['request'])}</pre>
+                    </div>
+                    <div class="response">
+                        <h3>Ответ:</h3>
+                        <pre>{html.escape(record['response'])}</pre>
+                    </div>
+                </div>
+                '''
+            for record in reversed(self.request_history)
+        ])
+
         return f"""
-        <!DOCTYPE html>
-        <html lang="ru">
-        <head>
-            <meta charset="UTF-8">
-            <title>Группа ПМИМ-31</title>
-            <style>
-                body {{ 
-                    font-family: Arial, sans-serif; 
-                    max-width: 800px; 
-                    margin: 0 auto; 
-                    padding: 20px; 
-                    line-height: 1.6; 
-                }}
-                h1 {{ color: #333; text-align: center; }}
-                .members, .reports {{ 
-                    background-color: #f4f4f4; 
-                    padding: 15px; 
-                    border-radius: 5px;
-                    margin-bottom: 20px; 
-                }}
-                a {{ color: #0066cc; text-decoration: none; }}
-                a:hover {{ text-decoration: underline; }}
-            </style>
-        </head>
-        <body>
-            <h1>Группа ПМИМ-31</h1>
-            <div class="members">
-                <h2>Состав бригады:</h2>
-                <ul>
-                    <li>Тарулин М.А.</li>
-                    <li>Холодова В.С.</li>
-                </ul>
-            </div>
-            <div class="reports">
-                <h2>Отчеты:</h2>
-                <ul>
-                    {reports_html}
-                </ul>
-            </div>
-        </body>
-        </html>
-        """
+                <!DOCTYPE html>
+                <html lang="ru">
+                <head>
+                    <meta charset="UTF-8">
+                    <title>Группа ПМИМ-31</title>
+                    <style>
+                        body {{ 
+                            font-family: Arial, sans-serif; 
+                            max-width: 1200px; 
+                            margin: 0 auto; 
+                            padding: 20px; 
+                            line-height: 1.6; 
+                        }}
+                        h1, h2 {{ color: #333; text-align: center; }}
+                        .members, .reports, .request-history {{ 
+                            background-color: #f4f4f4; 
+                            padding: 15px; 
+                            border-radius: 5px;
+                            margin-bottom: 20px; 
+                        }}
+                        a {{ color: #0066cc; text-decoration: none; }}
+                        a:hover {{ text-decoration: underline; }}
+                        .request-response {{
+                            border: 1px solid #ddd;
+                            margin-bottom: 10px;
+                            padding: 10px;
+                        }}
+                        pre {{
+                            background-color: #e9e9e9;
+                            padding: 10px;
+                            border-radius: 5px;
+                            white-space: pre-wrap;
+                            word-wrap: break-word;
+                            font-size: 0.8em;
+                        }}
+                    </style>
+                </head>
+                <body>
+                    <h1>Группа ПМИМ-31</h1>
+                    <div class="members">
+                        <h2>Состав бригады:</h2>
+                        <ul>
+                            <li>Тарулин М.А.</li>
+                            <li>Холодова В.С.</li>
+                        </ul>
+                    </div>
+                    <div class="reports">
+                        <h2>Отчеты:</h2>
+                        <ul>
+                            {reports_html}
+                        </ul>
+                    </div>
+                    <div class="request-history">
+                        <h2>История запросов и ответов:</h2>
+                        {requests_history_html}
+                    </div>
+                </body>
+                </html>
+                """
 
     def start(self):
         """Основной цикл сервера"""
